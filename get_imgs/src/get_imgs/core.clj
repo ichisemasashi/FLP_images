@@ -7,7 +7,7 @@
 ;; (def *flp-vol1* "https://www.feynmanlectures.caltech.edu/I_toc.html")
 (def fp (str *flp-base* "I_91.html"))
 (def fo (str *flp-base* "I_92.html"))
-(def v1_lecs (map #(str *flp-base* "I_" % ".html") (range 1 53)))
+(def v1_lecs (map #(str *flp-base* "I_" % ".html") (concat (map #(str "0" %) (range 1 10)) (map str (range 10 53)))))
 
 ;;;; URL
 (defn to-url [str]
@@ -29,6 +29,9 @@
 (defn image-urls [page]
   (remove #(= % "")
           (map #(get-in % [:attrs :src]) (html/select page [:img]))))
+(defn lec-images [page]
+  (remove nil? (remove #(= % "")
+          (map #(get-in % [:attrs :data-src]) (html/select page [:img])))))
 
 (defn save-img [url-str]
   (let [file-name (str "IMEGES/" (last (clojure.string/split url-str #"/")))
